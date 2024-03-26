@@ -1,30 +1,35 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
   <router-view />
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<script lang="ts" setup>
+</script>
+<style scoped>
+.body {
+  margin: 0px !important;
 }
 
-nav {
-  padding: 30px;
+.logo {
+  width: 34px;
+  height: 34px;
+  margin: 18px 16px;
+  background-image: url('~@/assets/logo.png');
+  background-size: cover;
+  background-position: center;
 }
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
+.site-layout .site-layout-background {
+  background: #fff;
+}
+[data-theme='dark'] .site-layout .site-layout-background {
+  background: #141414;
 }
 
-nav a.router-link-exact-active {
-  color: #42b983;
+.anticon {
+  font-size: 20px !important;
+}
+
+#a-layout-header .ant-menu-item-selected.custom-selected {
+  background-color: #2276b9 !important;
 }
 </style>

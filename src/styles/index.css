@@ -1,0 +1,29 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.ant-menu-light .ant-menu-item-selected {
+  background-color: #fadb14;
+  color: #000 !important;
+}
+
+.ant-menu-light .ant-menu-item {
+  color: #999;
+}
+
+.site-layout .site-layout-background {
+  background: #fff;
+}
+
+[data-theme="dark"] .site-layout .site-layout-background {
+  background: #141414;
+}
+
+.anticon {
+  font-size: 20px !important;
+}
+
+#a-layout-header .ant-menu-item-selected.custom-selected {
+  background-color: #2276b9 !important;
+}
