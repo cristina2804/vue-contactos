@@ -31,3 +31,32 @@ body {
 .ant-table-wrapper .ant-table.ant-table-small {
   font-size: 12px !important;
 }
+
+.ant-card .ant-card-body {
+  padding: 10px;
+}
+
+.drawer-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.top-text {
+  margin-bottom: auto;
+}
+
+.centered-image-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  padding: 60px;
+  text-align: center;
+}
+
+.centered-text {
+  text-align: center;
+  margin-top: 10px;
+}

@@ -1,5 +1,5 @@
 <template>
-  <a-table :columns="columns" :data-source="data" :scroll="{ x: 1300, y: 1000 }"  size="small" 
+  <a-table :columns="columns" :data-source="dataFilter" :scroll="{ x: 1300, y: 1000 }"  size="small" 
     bordered :loading="loadingTable"  :expand-column-width="100">
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'operation'">
@@ -58,7 +58,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import type { TableColumnsType } from 'ant-design-vue';
 import { useContactsStore } from '../../store/contacts';
 import axios from 'axios';
@@ -126,6 +126,10 @@ const getContacts = async () => {
   }
   loadingTable.value = false;
 };
+
+const dataFilter = computed(() => {
+  return storex.getContactsFilterSimple;
+});
 
 onMounted(async () => {
   await getContacts();

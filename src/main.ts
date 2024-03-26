@@ -16,7 +16,15 @@ import {
   Typography,
   Input,
   Select,
-  Space
+  Space,
+  Drawer,
+  Form,
+  Row,
+  Col,
+  DatePicker,
+  Card,
+  Checkbox,
+  Tooltip,
 } from 'ant-design-vue';
 import './styles/index.css';
 
@@ -36,5 +44,13 @@ app
   .use(Typography)
   .use(Input)
   .use(Select)
-  .use(Space);
+  .use(Space)
+  .use(Drawer)
+  .use(Form)
+  .use(Row)
+  .use(Col)
+  .use(DatePicker)
+  .use(Card)
+  .use(Checkbox)
+  .use(Tooltip);
 app.mount('#app');
