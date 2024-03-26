@@ -11,6 +11,12 @@ import {
   Flex,
   Divider,
   Avatar,
+  Table,
+  Switch,
+  Typography,
+  Input,
+  Select,
+  Space
 } from 'ant-design-vue';
 import './styles/index.css';
 
@@ -24,5 +30,11 @@ app
   .use(Button)
   .use(Flex)
   .use(Divider)
-  .use(Avatar);
+  .use(Avatar)
+  .use(Table)
+  .use(Switch)
+  .use(Typography)
+  .use(Input)
+  .use(Select)
+  .use(Space);
 app.mount('#app');

@@ -27,3 +27,7 @@ body {
 #a-layout-header .ant-menu-item-selected.custom-selected {
   background-color: #2276b9 !important;
 }
+
+.ant-table-wrapper .ant-table.ant-table-small {
+  font-size: 12px !important;
+}
