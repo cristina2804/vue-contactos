@@ -1,260 +1,342 @@
 <template>
-    <a-modal
-      progress-dot
-      :open="modalVisible"
-      :footer="null"
-      title="Crear un nuevo contacto"
-      @cancel="cerrarModal"
-      :width="'667px'"
-    >
-      <div style="padding: 10px 60px;">
-        <a-steps :current="currentStep" style="margin-top: 30px;">
-          <a-step title="Completar datos"></a-step>
-          <a-step title="Asignar campaña"></a-step>
-        </a-steps>
-  
-        <div v-show="currentStep === 0">
-          <h2 style="text-align: center;">Datos personales</h2>
-          <a-form ref="formulario" @submit.prevent="continuarStep">
-            <a-row :gutter="16">
-              <a-col :span="24">
-                <label>* Nombres</label>
-                <a-input v-model:value="nombres" placeholder="Escribir nombres" 
-                  required></a-input>
-              </a-col>
-            </a-row>
-            <a-row :gutter="16" style="margin-top: 10px;">
-              <a-col :span="12">
-                <label>* Apellido paterno</label>
-                <a-input v-model:value="apellidoPaterno" placeholder="Escribir apellido paterno"
-                  required></a-input>
-              </a-col>
-              <a-col :span="12">
-                <label>Apellido materno</label>
-                <a-input v-model:value="apellidoMaterno" placeholder="Escribir apellido materno"></a-input>
-              </a-col>
-            </a-row>
-            <a-row :gutter="16" style="margin-top: 10px;">
-              <a-col :span="12">
-                <label>Tipo de documento</label><br/>
-                <a-select
-                  style="width: 100%;"
-                  v-model:value="tipoDocumento"
-                  :options="optionsDocumentos"
-                ></a-select>
-              </a-col>
-              <a-col :span="12">
-                <label>Número de documento</label>
-                <a-input v-model:value="numeroDocumento" placeholder="Escribir número de documento (campo obligatorio)" required></a-input>
-              </a-col>
-            </a-row>
-            <a-row :gutter="16" style="margin-top: 10px;">
-              <a-col :span="12">
-                <label>Dirección</label>
-                <a-input v-model:value="direccion" placeholder="Escribir dirección"></a-input>
-              </a-col>
-              <a-col :span="12">
-                <label>Correo electrónico</label>
-                <a-input v-model:value="correoElectronico" placeholder="Escribir correo electrónico"></a-input>
-              </a-col>
-            </a-row>
-            <a-row :gutter="16" style="margin-top: 10px;">
-              <a-col :span="24">
-                <label>Teléfono de contacto</label>
-                <a-input v-model:value:value="telefono" :addon-before="prefijoTelefono" />
-              </a-col>
-            </a-row>
-            <a-row :gutter="16" style="margin-top: 10px;">
-              <a-col :span="24" style="text-align: center;">
-                Podrás agregar más de cada uno de estos datos después de crear el contacto
-              </a-col>
-            </a-row>
-            <a-row :gutter="16" class="button-group">
-              <a-button @click="cerrarModal">Cancelar</a-button>
-              <a-button @click="continuarStep" style="margin-left: 10px;">Continuar</a-button>
-            </a-row>
-          </a-form>
+  <a-drawer
+    title="Detalles del Contacto"
+    :width="660"
+    :open="openDrawer"
+    :body-style="{ paddingBottom: '80px' }"
+    :footer-style="{ textAlign: 'right' }"
+    @close="onClose"
+    :closable="false"
+  >
+    <div>
+      <a-row :gutter="16">
+        <div class="avatar-section">
+          <a-avatar class="avatar" size="large" 
+            :style="{ backgroundColor: '#f0f5ff', borderColor: '#85a5ff', color: '#1d39c4', verticalAlign: 'middle' }">
+            {{ initials }}
+          </a-avatar>
+          <div class="content">
+            <div class="top-section">
+              <a-typography class="bold-text" :level="4">{{ name }}</a-typography>
+              <a-typography class="italic-text">{{ campaign }}</a-typography>
+            </div>
+          </div>
         </div>
-  
-        <div v-show="currentStep === 1">
-          <h2 style="text-align: center;">Selecciona Camapaña</h2>
-          <a-row :gutter="16">
-            <a-col :span="24">
-              Selecciona la campaña donde quieres crear este nuevo contacto.
-            </a-col>
-          </a-row>
-          <a-row :gutter="16">
-            <a-col :span="24">
-              <a-table :columns="columns" :data-source="data" :pagination="false">
-                <template #bodyCell="{ column, record, text }">
-                  <template v-if="column.dataIndex === 'actions'">
-                    <a @click="saveContact(record)">{{ text }}</a>
-                  </template>
-                </template>
-              </a-table>
-            </a-col>
-          </a-row>
-          <a-row :gutter="16" class="button-group">
-            <a-button @click="retrocederStep" style="margin-left: 10px;">Volver</a-button>
-          </a-row>
+      </a-row>
+      <a-row style="margin-top: 20px;">
+        <a-tabs v-model:activeKey="activeKey" type="card">
+          <a-tab-pane key="1" tab="Personal" force-render>
+            <a-tabs v-model:activeKey="activeKey2">
+              <a-tab-pane key="1" tab="Datos" force-render>
+              </a-tab-pane>
+              <a-tab-pane key="2" tab="Telefonos" force-render>
+              </a-tab-pane>
+            </a-tabs>
+          </a-tab-pane>
+          <a-tab-pane key="2" tab="Ticket">
+          </a-tab-pane>
+        </a-tabs>
+      </a-row>
+      <a-row>
+        <div v-if="activeKey == '1' && activeKey2 == '1'">
+          <a-typography-text type="secondary" class="centered-text">
+            Puedes agregar o editar información acorde a los campos configurados.
+          </a-typography-text><br/>
+          ...datos personales...
         </div>
-      </div>
-    </a-modal>
-  </template>
-  <script lang="ts" setup>
-  import { ref, watch } from 'vue';
-  import Swal from 'sweetalert2';
-  import axios from 'axios';
-  
-  const dProps = defineProps({
-    modalVisible: {
-      type: Boolean,
-      default: false,
-    },
+        <a-table v-if="activeKey == '1' && activeKey2 == '2'" 
+          :scroll="{ x: 1000 }" :expand-column-width="10"  size="small"
+          :dataSource="dataTelefonos" :columns="columnsTelefonos" />
+        <a-table v-if="activeKey == '2'" 
+          :scroll="{ x: 1500 }" :expand-column-width="10"  size="small"
+          :dataSource="dataTickets" :columns="columnsTickets" />
+      </a-row>
+    </div>
+    <template #extra>
+      <a-space>
+        <CloseOutlined @click="onClose"/>
+      </a-space>
+    </template>
+    <template #footer>
+      <a-flex :justify="'space-between'">
+        <a-button type="link" danger @click="eliminarContacto">Eliminar contacto</a-button>
+        <div>
+          <a-button style="margin-right: 8px">Ver anterior contacto</a-button>
+          <a-button type="primary">Ver siguiente contacto</a-button>
+        </div>
+      </a-flex>
+    </template>
+  </a-drawer>
+</template>
+
+<script lang="ts" setup>
+import { Ref, ref, watch } from 'vue';
+// import dayjs, { Dayjs } from 'dayjs';
+const dateFormat = 'DD/MM/YY';
+import { useContactsStore } from '../../store/contacts';
+import { CloseOutlined } from "@ant-design/icons-vue";
+import axios from 'axios';
+import TransferSelect from "../molecules/TransferSelect.vue";
+import Swal from 'sweetalert2';
+
+const storex = useContactsStore();
+
+const dProps = defineProps({
+  openDrawer: {
+    type: Boolean,
+    default: false,
+  },
+  tabActive: {
+    type: String,
+    default: 'DP',
+  }
+});
+
+const openDrawer = ref(dProps.openDrawer);
+const tabActive = ref(dProps.tabActive);
+const activeKey = ref('1');
+const activeKey2 = ref('1');
+const initials = ref('JM');
+const name = 'Jenny Wilson Kong';
+const campaign = 'Campaña: Ventas 2024 navidad ';
+
+const dataTelefonos = ref([
+  {
+    key: '1',
+    codigo: '+51',
+    numero: '992839281',
+    tipoTelefono: 'Celular',
+    origen: 'Personal',
+    operadorTelefonico: 'Movistar',
+    prioridad: '1',
+    observacion: 'Este número solo resp...',
+  },
+  {
+    key: '2',
+    codigo: '+51',
+    numero: '992839281',
+    tipoTelefono: 'Celular',
+    origen: 'Personal',
+    operadorTelefonico: 'Movistar',
+    prioridad: '1',
+    observacion: 'Este número solo resp...',
+  },
+  {
+    key: '3',
+    codigo: '+51',
+    numero: '992839281',
+    tipoTelefono: 'Celular',
+    origen: '-',
+    operadorTelefonico: 'Claro',
+    prioridad: '1',
+    observacion: 'Este número solo resp...',
+  },
+  {
+    key: '4',
+    codigo: '+51',
+    numero: '992839281',
+    tipoTelefono: 'Celular',
+    origen: 'Personal',
+    operadorTelefonico: 'Entel',
+    prioridad: '2',
+    observacion: 'Este número solo resp...',
+  },
+]);
+
+const columnsTelefonos = ref([
+  {
+    title: 'Código del país',
+    dataIndex: 'codigo',
+    key: 'codigo',
+    width: 40,
+  },
+  {
+    title: 'Número',
+    dataIndex: 'numero',
+    key: 'numero',
+    width: 30,
+  },
+  {
+    title: 'Tipo de teléfono',
+    dataIndex: 'tipoTelefono',
+    key: 'tipoTelefono',
+    width: 40,
+  },
+  {
+    title: 'Origen',
+    dataIndex: 'origen',
+    key: 'origen',
+    width: 40,
+  },
+  {
+    title: 'Operador telefónico',
+    dataIndex: 'operadorTelefonico',
+    key: 'operadorTelefonico',
+    width: 40,
+  },
+  {
+    title: 'Prioridad',
+    dataIndex: 'prioridad',
+    key: 'prioridad',
+    width: 40,
+  },
+  {
+    title: 'Observación',
+    dataIndex: 'observacion',
+    key: 'observacion',
+    width: 130,
+  },
+]);
+
+const dataTickets = ref([
+  {
+    key: '1',
+    fecha: '24/05/2024 10:04:23',
+    canal: '',
+    identificador: 'Roma Seguros',
+    telefono: '5198765454',
+    usuario: 'Carmen Rosa Gutierrez',
+    grupo: 'Contacto Directo',
+    resultado: 'Promesa de pago',
+    motivo: 'En 24 horas',
+    submotivo: '-',
+    comentario: 'Contestó y se comp...',
+  },
+]);
+
+const columnsTickets = ref([
+  {
+    title: 'Fecha y hora',
+    dataIndex: 'fecha',
+    key: 'fecha',
+    width: 120,
+  },
+  {
+    title: 'Canal',
+    dataIndex: 'canal',
+    key: 'canal',
+    width: 30,
+  },
+  {
+    title: 'Identificador',
+    dataIndex: 'identificador',
+    key: 'identificador',
+    width: 40,
+  },
+  {
+    title: 'Telefono del contacto',
+    dataIndex: 'telefono',
+    key: 'telefono',
+    width: 160,
+  },
+  {
+    title: 'Usuario que gestionó',
+    dataIndex: 'usuario',
+    key: 'usuario',
+    width: 160,
+  },
+  {
+    title: 'Grupo',
+    dataIndex: 'grupo',
+    key: 'grupo',
+    width: 100,
+  },
+  {
+    title: 'Resultado',
+    dataIndex: 'resultado',
+    key: 'resultado',
+    width: 130,
+  },
+  {
+    title: 'Motivo',
+    dataIndex: 'motivo',
+    key: 'motivo',
+    width: 130,
+  },
+  {
+    title: 'Submotivo',
+    dataIndex: 'submotivo',
+    key: 'submotivo',
+    width: 130,
+  },
+  {
+    title: 'Comentario',
+    dataIndex: 'comentario',
+    key: 'comentario',
+    width: 130,
+  },
+]);
+
+const onClose = () => {
+  emits('closeDrawer');
+}
+
+const eliminarContacto = () => {
+  Swal.fire({
+    title: '¿Estás seguro de eliminar el contacto ' + name.value + '?',
+    text: '¡Recuerda que ya no se visualizará este contacto en la tabla. Si deseas volver a visualizarlo, deberás agregarlo nuevamente a Score. !',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#1677ff',
+    cancelButtonColor: '##ffffff',
+    confirmButtonText: 'Aceptar',
+    cancelButtonText: 'Cancelar'
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      Swal.fire(
+        'Eliminado',
+        'Se hizo la eliminación correctamente.',
+        'success'
+      );
+    }
   });
-  
-  const currentStep = ref(0);
-  const nombres = ref('');
-  const apellidoPaterno = ref('');
-  const apellidoMaterno = ref('');
-  const tipoDocumento = ref('DNI');
-  const numeroDocumento = ref('');
-  const direccion = ref('');
-  const correoElectronico = ref('');
-  const prefijoTelefono = ref('+51');
-  const telefono = ref('');
-  const modalVisible = ref(dProps.modalVisible);
-  
-  const optionsDocumentos = ref([
-    { id: 1, nombre: 'DNI', selected: false },
-  ]);
-  
-  const columns = [
-    {
-      title: 'Empresa',
-      dataIndex: 'entity_name',
-      key: 'entity_name',
-      width: 150,
-    },
-    {
-      title: 'Campaña',
-      dataIndex: 'portfolio_name',
-      key: 'portfolio_name',
-      width: 150,
-    },
-    {
-      title: 'Acciones',
-      dataIndex: 'actions',
-      key: 'actions'
-    },
-  ];
-  
-  const data = [
-    {
-      key: '1',
-      entity_name: 'ScoreQA TEST',
-      portfolio_name: 'Campaña QA CDZR',
-      portfolio: '97',
-      actions: 'Crear contacto aquí'
-    },
-  ];
-  
-  let api = process.env.VUE_APP_API_URL + 'contacts/clients/create/';
-  
-  const continuarStep = async () => {
-    if (nombres.value != '' && apellidoPaterno.value != '') {
-      currentStep.value++;
-    } else {
-      alert('Por favor completa todos los campos obligatorios.');
+}
+
+watch(
+  () => dProps.openDrawer,
+  (v: boolean) => {
+    console.log('cambia open drawer')
+    openDrawer.value = v;
+  }
+);
+
+watch(
+  () => dProps.tabActive,
+  (v: string) => {
+    tabActive.value = v;
+    console.log(tabActive.value);
+    if (v == 'DP') {
+      activeKey.value = '1';
+      activeKey2.value = '1';
+    } else if (v == 'TE') {
+      activeKey.value = '1';
+      activeKey2.value = '2';
     }
-  };
-  
-  const retrocederStep = async () => {
-    currentStep.value--;
+    console.log(activeKey2.value);
   }
-  
-  const saveContact = async (empresa: any) => {
-    console.log(empresa)
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: '¡Se guardará el contacto en la campaña seleccionada!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#1677ff',
-      cancelButtonColor: '##ffffff',
-      confirmButtonText: 'Aceptar',
-      cancelButtonText: 'Cancelar'
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        const formData = new FormData();
-        // formData.append('entity', '1');
-        // formData.append('code', '28282');
-        // formData.append('type_document', ''); //algunos campos generan error al no tener los id
-        // formData.append('document_number', numeroDocumento.value);
-        formData.append('first_name', nombres.value);
-        formData.append('paternal_surname', apellidoPaterno.value);
-        // formData.append('birthdate', '');
-        formData.append('portfolio', empresa.portfolio);
-        // formData.append('base', '1');
-        // formData.append('code_phone', '51');
-        // formData.append('phone', prefijoTelefono.value);
-        // formData.append('country', '1');
-        axios.post(api, formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${process.env.VUE_APP_TOKEN}`
-          }
-        }).then(response => {
-          console.log(response);
-          Swal.fire(
-            'Guardado',
-            'Se hizo el registro correctamente.',
-            'success'
-          );
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-      }
-    });
-    console.log(empresa);
-  }
-  
-  const cerrarModal = () => {
-    emits('closeModal');
-  }
-  
-  const clearModal = () => {
-    currentStep.value = 0;
-    nombres.value = '';
-    apellidoPaterno.value = '';
-    apellidoMaterno.value = '';
-    tipoDocumento.value = 'DNI';
-    numeroDocumento.value = '';
-    direccion.value = '';
-    correoElectronico.value = '';
-    prefijoTelefono.value = '+51';
-    telefono.value = '';
-  }
-  
-  const emits = defineEmits(['closeModal']);
-  
-  watch(
-    () => dProps.modalVisible,
-    (v: boolean) => {
-      clearModal();
-      modalVisible.value = v;
-    }
-  );
-  
-  </script>
-  
-  <style scoped>
-  .button-group {
-    display: flex;
-    justify-content: center;
-    margin-top: 30px;
-    text-align: center;
-  }
-  </style>
+);
+
+const emits = defineEmits(['closeDrawer']);
+
+</script>
+
+<style scoped>
+.avatar-section {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  margin-right: 16px; /* Espacio entre el avatar y el contenido */
+}
+
+.bold-text {
+  font-weight: bold;
+}
+
+.italic-text {
+  font-style: italic;
+  color: #8c8c8c;
+}
+
+</style>

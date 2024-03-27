@@ -3,16 +3,20 @@
     bordered :loading="loadingTable"  :expand-column-width="100">
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'operation'">
-        <a-switch v-model:checked="record['active']" size="small" />
-        <DeleteOutlined :style="{ marginLeft: '10px', color: '#1677ff' }" />
+        <a-tooltip :title="record['active'] == true ? 'Inactivar' : 'Activar'" placement="top">
+          <a-switch v-model:checked="record['active']" size="small" />
+        </a-tooltip>
+        <a-tooltip title="Eliminar" placement="top">
+          <DeleteOutlined @click="eliminar(record['full_name'])" :style="{ marginLeft: '10px', color: '#1677ff' }" />
+        </a-tooltip>
       </template>
       <template v-else-if="column.key === 'full_name'">
-        <a target="_blank">
+        <a @click="openDetailsContact('DP')">
           {{ record[column.key] }}
         </a>
       </template>
       <template v-else-if="column.key === 'phones'">
-        <a target="_blank">
+        <a @click="openDetailsContact('TE')">
           {{ record[column.key]?.length }} Teléfono{{ record[column.key]?.length == 1 ? '' : 's' }}
         </a>
       </template>
@@ -55,20 +59,25 @@
       </template>
     </template>
   </a-table>
+  <DetailsContact :openDrawer="openDrawer" :tabActive="tabDrawer" @closeDrawer="closeDrawer"/>
 </template>
 
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue';
 import type { TableColumnsType } from 'ant-design-vue';
 import { useContactsStore } from '../../store/contacts';
+import DetailsContact from "@/components/organisms/DetailsContact.vue";
 import axios from 'axios';
 import dayjs from 'dayjs';
 import {
   DeleteOutlined,
 } from "@ant-design/icons-vue";
+import Swal from 'sweetalert2';
 
 const storex = useContactsStore();
 
+const openDrawer = ref(false);
+const tabDrawer = ref('DP');
 const loadingTable = ref(false);
 const columns: TableColumnsType = [
   { title: 'Cod Contacto', dataIndex: 'code', width: 130, key: 'code' },
@@ -126,6 +135,38 @@ const getContacts = async () => {
   }
   loadingTable.value = false;
 };
+
+const openDetailsContact = (tab: string) => {
+  console.log('entra aca');
+  openDrawer.value = true;
+  tabDrawer.value = tab;
+}
+
+const closeDrawer = () => {
+  openDrawer.value = false;
+  tabDrawer.value = 'DP';
+}
+
+const eliminar = (nombre: string) => {
+  Swal.fire({
+    title: '¿Estás seguro de eliminar el contacto ' + nombre + '?',
+    text: '¡Recuerda que ya no se visualizará este contacto en la tabla. Si deseas volver a visualizarlo, deberás agregarlo nuevamente a Score. !',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#1677ff',
+    cancelButtonColor: '##ffffff',
+    confirmButtonText: 'Aceptar',
+    cancelButtonText: 'Cancelar'
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      Swal.fire(
+        'Eliminado',
+        'Se hizo la eliminación correctamente.',
+        'success'
+      );
+    }
+  });
+}
 
 const dataFilter = computed(() => {
   return storex.getContactsFilterSimple;

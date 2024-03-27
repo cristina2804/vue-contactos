@@ -27,6 +27,7 @@ import {
   Tooltip,
   Modal,
   Steps,
+  Tabs,
 } from 'ant-design-vue';
 import './styles/index.css';
 
@@ -56,5 +57,6 @@ app
   .use(Checkbox)
   .use(Tooltip)
   .use(Modal)
-  .use(Steps);
+  .use(Steps)
+  .use(Tabs);
 app.mount('#app');

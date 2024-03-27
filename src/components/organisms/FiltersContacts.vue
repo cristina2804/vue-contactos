@@ -43,7 +43,7 @@ import {
 } from "@ant-design/icons-vue";
 
 const storex = useContactsStore();
-const filtersAdvancedContactsRef = ref(null);
+const filtersAdvancedContactsRef: Ref<any> = ref(null);
 
 const optionsEmpresas: Ref<Array<any>> = ref([]);
 const optionsPortafolios: Ref<Array<any>> = ref([]);
@@ -58,7 +58,6 @@ const filter = reactive({
   portafolio: '',
   estado: ''
 });
-const open = ref(false);
 
 const openFilter = () => {
   if (filtersAdvancedContactsRef.value != null)

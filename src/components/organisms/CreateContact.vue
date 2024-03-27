@@ -4,7 +4,7 @@
     :open="modalVisible"
     :footer="null"
     title="Crear un nuevo contacto"
-    @cancel="cerrarModal"
+    @cancel="closeModal"
     :width="'667px'"
   >
     <div style="padding: 10px 60px;">
@@ -70,7 +70,7 @@
             </a-col>
           </a-row>
           <a-row :gutter="16" class="button-group">
-            <a-button @click="cerrarModal">Cancelar</a-button>
+            <a-button @click="closeModal">Cancelar</a-button>
             <a-button @click="continuarStep" style="margin-left: 10px;">Continuar</a-button>
           </a-row>
         </a-form>
@@ -221,7 +221,7 @@ const saveContact = async (empresa: any) => {
   console.log(empresa);
 }
 
-const cerrarModal = () => {
+const closeModal = () => {
   emits('closeModal');
 }
 
