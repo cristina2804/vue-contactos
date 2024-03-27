@@ -29,7 +29,6 @@
     ></a-select>
     <a-button type="primary" ghost @click="openFilter">
       Filtros Avanzados
-      <PlusOutlined />
     </a-button>
   </a-space>
   <filters-advanced-contacts ref="filtersAdvancedContactsRef" />

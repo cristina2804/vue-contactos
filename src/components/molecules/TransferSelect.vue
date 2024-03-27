@@ -115,4 +115,21 @@ const personasSeleccionadas = computed(() => {
   padding: 0;
   margin: 10px;
 }
+.centered-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.centered-image {
+  width: 100px;
+  height: auto;
+}
+
+.centered-text {
+  margin-top: 10px;
+  text-align: center;
+}
 </style>

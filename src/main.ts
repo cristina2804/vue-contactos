@@ -25,6 +25,8 @@ import {
   Card,
   Checkbox,
   Tooltip,
+  Modal,
+  Steps,
 } from 'ant-design-vue';
 import './styles/index.css';
 
@@ -52,5 +54,7 @@ app
   .use(DatePicker)
   .use(Card)
   .use(Checkbox)
-  .use(Tooltip);
+  .use(Tooltip)
+  .use(Modal)
+  .use(Steps);
 app.mount('#app');

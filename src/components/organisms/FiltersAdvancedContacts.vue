@@ -151,9 +151,9 @@
         <a-button type="primary" @click="onClose">Submit</a-button> -->
       </a-space>
     </template>
-    <template #footer>
+    <template #footer v-if="filtersSimple.empresa != ''">
       <a-button style="margin-right: 8px" @click="onClose">Limpiar</a-button>
-      <a-button type="primary" @click="onClose">Aplicar</a-button>
+      <a-button type="primary" @click="filtrar">Aplicar</a-button>
     </template>
   </a-drawer>
 </template>
@@ -164,6 +164,7 @@ import { Ref, ref, watch } from 'vue';
 const dateFormat = 'DD/MM/YY';
 import { useContactsStore } from '@/store/contacts';
 import { CloseOutlined } from "@ant-design/icons-vue";
+import axios from 'axios';
 import TransferSelect from "@/components/molecules/TransferSelect.vue";
 
 const storex = useContactsStore();
@@ -206,6 +207,8 @@ const open = ref(false);
 const tooltipRef = ref(null);
 const filtersSimple: Ref<any> = ref(null);
 
+let api = process.env.VUE_APP_API_URL + 'contacts/clients/';
+
 const openFilter = () => {
   filtersSimple.value = storex.getFilters;
   open.value = true;
@@ -213,6 +216,36 @@ const openFilter = () => {
 
 const onClose = () => {
   open.value = false;
+}
+
+const filtrar = async () => {
+  try {
+    const response = await axios.post(api, {
+      entity_id: 1,
+      portafolio_id: 1,
+      base_id: 1,
+      groups_id: [],
+      results_id: [],
+      users_id: [],
+      last_management_date_start: "2022-01-01 12:54:45",
+      last_management_date_end: "2022-01-01 12:54:45",
+      has_products: false,
+      assigned: "1"
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.VUE_APP_TOKEN}`
+      }
+    });
+    api = response.data.next;
+    // La api no devuelve estado, agrego campo active para simulación
+    const data = response.data.results.map((el: any) => ({...el, active: true}));
+    storex.updateContacts(data);
+    storex.updateTotalContacts(response.data.count)
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+  onClose();
 }
 
 defineExpose({ openFilter });

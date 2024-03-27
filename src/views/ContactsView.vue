@@ -27,12 +27,13 @@
   >
     <filters-contacts />
     <div>
-      <a-button type="primary" ghost>
+      <a-button type="primary" ghost @click="openModalCreate">
         Crear Contacto
         <PlusOutlined />
       </a-button>
     </div>
   </a-flex>
+  <CreateContact :modalVisible="modalVisible" @closeModal="closeModal"/>
   <br />
   <table-contacts />
 </template>
@@ -41,10 +42,22 @@
 import { ref, watch } from "vue";
 import FiltersContacts from "@/components/organisms/FiltersContacts.vue";
 import TableContacts from "@/components/organisms/TableContacts.vue";
+import CreateContact from "@/components/organisms/CreateContact.vue";
 import { useContactsStore } from "@/store/contacts";
 import { PlusOutlined } from "@ant-design/icons-vue";
+
 const storex = useContactsStore();
 const total = ref(0);
+
+const modalVisible = ref(false);
+
+const openModalCreate = () => {
+  modalVisible.value = true;
+}
+
+const closeModal = () => {
+  modalVisible.value = false;
+}
 
 watch(
   () => storex.getTotalContacts,
