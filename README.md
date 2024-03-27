@@ -13,6 +13,7 @@ npm install
 ```
 npm run serve
 ```
+Ruta: http://localhost:8080/contacts
 
 ### Compiles and minifies for production
 ```
